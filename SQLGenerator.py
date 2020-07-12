@@ -6,7 +6,7 @@ class SQLGenerator:
             select = '\n,'.join(select)
         if where is None:
             where = 'True'
-        self.sql_string = 'select\n%s\nfrom %s where %s'%(select,input_name,where)
+        self.sql_string = 'select\n%s\nfrom %s\nwhere %s'%(select,input_name,where)
         self.output_nick = output_nick
         self.output_name = output_name
         self.current_layer = 0
