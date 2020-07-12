@@ -12,7 +12,7 @@ class SQLGenerator:
             where = 'True'
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
         select_string = '\n,'.join(select)
-        layer_name = '%s_temp_%s'%(self.output_nick,self.current_layer)
+        layer_name = '%s_%s'%(self.output_nick,self.current_layer)
         self.sql_string = '''select 
 %s
 from
@@ -25,7 +25,7 @@ where %s'''%(select_string,self.sql_string,layer_name,where)
         
     def where(self,where):
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
-        layer_name = '%s_temp_%s'%(self.output_nick,self.current_layer)
+        layer_name = '%s_%s'%(self.output_nick,self.current_layer)
         self.sql_string = '''select 
 *
 from
@@ -39,7 +39,7 @@ where %s'''%(self.sql_string,layer_name,where)
     def rename(self,original_name,new_name):
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
         rename_string = '%s as %s'%(original_name,new_name)
-        layer_name = '%s_temp_%s'%(self.output_nick,self.current_layer)
+        layer_name = '%s_%s'%(self.output_nick,self.current_layer)
         self.sql_string = '''select 
 *
 ,%s
@@ -53,7 +53,7 @@ from
     def rename_multiple(self,rename_struct):
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
         rename_string = '\n,'.join(['%s as %s'%(i[0],i[1]) for i in rename_struct])
-        layer_name = '%s_temp_%s'%(self.output_nick,self.current_layer)
+        layer_name = '%s_%s'%(self.output_nick,self.current_layer)
         self.sql_string = '''select 
 *
 ,%s
@@ -68,7 +68,7 @@ from
     def UDF(self,UDF_name,input_name_list,output_name):
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
         UDF_string = '%s(%s) as %s'%(UDF_name,','.join(input_name_list),output_name)
-        layer_name = '%s_temp_%s'%(self.output_nick,self.current_layer)
+        layer_name = '%s_%s'%(self.output_nick,self.current_layer)
         self.sql_string = '''select 
 *
 ,%s
@@ -82,7 +82,7 @@ from
     def UDF_multiple(self,UDF_struct):
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
         UDF_string = '\n,'.join(['%s(%s) as %s'%(i[0],','.join(i[1]),i[2]) for i in UDF_struct])
-        layer_name = '%s_temp_%s'%(self.output_nick,self.current_layer)
+        layer_name = '%s_%s'%(self.output_nick,self.current_layer)
         self.sql_string = '''select 
 *
 ,%s
@@ -96,8 +96,8 @@ from
     def join(self,target_table_sql_generator,on,how='left outer'):
         self.sql_left = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
         self.sql_right = '\n'.join(['\t'+line for line in target_table_sql_generator.sql_string.split('\n')])
-        self.layer_name_left = '%s_temp_%s'%(self.output_nick,self.current_layer)
-        self.layer_name_right = '%s_temp_%s'%(target_table_sql_generator.output_nick,target_table_sql_generator.current_layer)
+        self.layer_name_left = '%s_%s'%(self.output_nick,self.current_layer)
+        self.layer_name_right = '%s_%s'%(target_table_sql_generator.output_nick,target_table_sql_generator.current_layer)
         self.sql_on_condition = on.replace('left',self.layer_name_left).replace('right',self.layer_name_right)
         self.sql_string = '''select 
 *
