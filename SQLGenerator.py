@@ -1,8 +1,12 @@
 class SQLGenerator:
-    def __init__(self,input_name,output_name,output_nick,where=None):
+    def __init__(self,input_name,output_name,output_nick,select=None,where=None):
+        if select is None:
+            select = '*'
+        else:
+            select = '\n,'.join(select)
         if where is None:
             where = 'True'
-        self.sql_string = 'select * from %s where %s'%(input_name,where)
+        self.sql_string = 'select\n%s\nfrom %s where %s'%(select,input_name,where)
         self.output_nick = output_nick
         self.output_name = output_name
         self.current_layer = 0
