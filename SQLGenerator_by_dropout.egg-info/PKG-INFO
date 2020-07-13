@@ -1,0 +1,22 @@
+Metadata-Version: 1.2
+Name: SQLGenerator-by-dropout
+Version: 0.0.1
+Summary: Generate SQL script with Pandas-like Python code
+Home-page: https://github.com/drop-out/SQL-Generator
+Author: drop-out
+Author-email: drop-out@foxmail.com
+License: UNKNOWN
+Description-Content-Type: text/markdown
+Description: # SQL-Generator
+        Generate SQL script with Pandas-like Python code
+        
+        # Install
+        ```bash
+        pip install https://github.com/drop-out/SQL-Generator/raw/master/dist/SQLGenerator-by-dropout-0.0.1.tar.gz
+        ```
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
