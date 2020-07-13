@@ -1,3 +1,6 @@
+
+#coding=utf-8
+
 alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 class Table:
     nick_list = ['ADD','ALL','ALTER','AND','AS','ASC','BETWEEN','BIGINT','BOOLEAN','BY','CASE','CAST','COLUMN','COMMENT','CREATE','DESC','DISTINCT','DISTRIBUTE','DOUBLE','DROP','ELSE','FALSE','FROM','FULL','GROUP','IF','IN','INSERT','INTO','IS','JOIN','LEFT','LIFECYCLE','LIKE','LIMIT','MAPJOIN','NOT','NULL','ON','OR','ORDER','OUTER','OVERWRITE','PARTITION','RENAME','REPLACE','RIGHT','RLIKE','SELECT','SORT','STRING','TABLE','THEN','TOUCH','TRUE','UNION','VIEW','WHEN','WHERE']
@@ -158,16 +161,3 @@ on %s'''%(self.sql_left,self.layer_name_left,how,self.sql_right,self.layer_name_
             self.sql_string = 'drop table if exists %s;\n'%name+self.sql_string
         print(self.sql_string)
 
-    
-
-table_left = Table('the_from_table','dt=20200101')
-table_right = Table('the_right_from_table','dt=20200101')
-
-table_left.select(['name1','namea','nameb'])\
-.where('condition_a>0')\
-.left_join(table_right,on='left.a = right.b')\
-.rename('name1','name2')\
-.rename_multiple([['namea','namec'],['nameb','named']])\
-.UDF('UDFc',['a','b'],'c')\
-.UDF_multiple([['UDF1',['a','b'],'c'],['UDF2',['p','q'],'r']])\
-.create('table_final',drop=True)
