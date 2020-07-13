@@ -1,1 +1,0 @@
-from SQLGenerator.Table import Table

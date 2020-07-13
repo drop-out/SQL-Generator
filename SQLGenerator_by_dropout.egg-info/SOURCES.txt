@@ -1,8 +1,0 @@
-README.md
-setup.py
-SQLGenerator/Table.py
-SQLGenerator/__init__.py
-SQLGenerator_by_dropout.egg-info/PKG-INFO
-SQLGenerator_by_dropout.egg-info/SOURCES.txt
-SQLGenerator_by_dropout.egg-info/dependency_links.txt
-SQLGenerator_by_dropout.egg-info/top_level.txt
