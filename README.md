@@ -2,8 +2,9 @@
 Generate SQL script with Pandas-like Python code
 feature:
 1. Automatically generate SQL script for you
-2. Support complicated nested join
-3. Name the staging table automatically, such as A_0,A_1,A_2 ...
+2. Automatically formatting
+3. Support complicated nested join
+4. Name the staging table automatically, such as A_0,A_1,A_2 ...
 
 Generated script example:
 ```sql
