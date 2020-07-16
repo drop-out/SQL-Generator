@@ -56,7 +56,7 @@ from
 ;
 ```
 
-Note that this seemingly complicated SQL script is generated with only a few line of Python Codes:
+Note that the seemingly complicated SQL script is generated with only a few lines of Python code:
 ```python
 table_left = Table('the_left_table','dt=20200101').select(['name1','name2'])
 table_right = Table('the_right_table','dt=20200101').select(['namec','named'])
