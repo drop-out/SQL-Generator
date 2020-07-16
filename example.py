@@ -8,6 +8,6 @@ table_left.select(['name1','namea','nameb'])\
 .left_join(table_right,on='left.a = right.b')\
 .rename('name1','name2')\
 .rename_multiple([['namea','namec'],['nameb','named']])\
-.function('',['a','b'],'c')\
-.complicated_function_multiple([['cast(var1 as string)',['d'],'e'],['(var1+var2)',['p','q'],'r']])\
+.expression('var1-var2',['a','b'],'c')\
+.expression_multiple([['cast(var1 as string)',['d'],'e'],['var1+var2',['p','q'],'r']])\
 .create('table_final',drop=True)

@@ -123,10 +123,10 @@ from
         self.current_layer+=1
         return self
     
-    def complicated_function(self,function_expression,input_name_list,output_name):
-        '''复杂函数,即多层嵌套的表达式,表达式中的输入变量用var1,var2...表示,如:substr(cast(var1 as string),1,var2)'''
+    def expression(self,expression_string,input_name_list,output_name):
+        '''表达式,表达式中的输入变量用var1,var2...表示,如:substr(cast(var1 as string),1,var2)'''
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
-        function_string = function_expression
+        function_string = expression_string
         for i in range(len(input_name_list)):
             function_string = function_string.replace('var%s'%(i+1),input_name_list[i])
         function_string = '%s as %s'%(function_string,output_name)
@@ -141,17 +141,17 @@ from
         self.current_layer+=1
         return self
     
-    def complicated_function_multiple(self,function_struct):
+    def expression_multiple(self,expression_struct):
         '''
-        复杂函数,即多层嵌套的表达式,表达式中的输入变量用var1,var2...表示,如:substr(cast(var1 as string),1,var2)
+        表达式,表达式中的输入变量用var1,var2...表示,如:substr(cast(var1 as string),1,var2)
         function_struct格式: [[function_expression,[var1,...,varn],output_name]]*n
         '''
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
         function_string_list = []
-        for function_struct_i in function_struct:
-            function_string = function_struct_i[0]
-            input_name_list = function_struct_i[1]
-            output_name = function_struct_i[2]
+        for expression_struct_i in expression_struct:
+            function_string = expression_struct_i[0]
+            input_name_list = expression_struct_i[1]
+            output_name = expression_struct_i[2]
             for i in range(len(input_name_list)):
                 function_string = function_string.replace('var%s'%(i+1),input_name_list[i])
             function_string = '%s as %s'%(function_string,output_name)
