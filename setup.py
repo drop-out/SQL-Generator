@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="SQLGenerator-by-dropout", # Replace with your own username
-    version="0.0.1",
+    version="0.0.2",
     author="drop-out",
     author_email="drop-out@foxmail.com",
     description="Generate SQL script with Pandas-like Python code",

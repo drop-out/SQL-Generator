@@ -94,9 +94,9 @@ from
         return self
     
     
-    def UDF(self,UDF_name,input_name_list,output_name):
+    def function(self,function_name,input_name_list,output_name):
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
-        UDF_string = '%s(%s) as %s'%(UDF_name,','.join(input_name_list),output_name)
+        function_string = '%s(%s) as %s'%(function_name,','.join(input_name_list),output_name)
         layer_name = '%s_%s'%(self.nick,self.current_layer)
         self.sql_string = '''select 
 *
@@ -104,13 +104,14 @@ from
 from
 \t(
 %s
-\t) %s'''%(UDF_string,self.sql_string,layer_name)
+\t) %s'''%(function_string,self.sql_string,layer_name)
         self.current_layer+=1
         return self
     
-    def UDF_multiple(self,UDF_struct):
+    def function_multiple(self,function_struct):
+        '''function_struct格式: [[function_name,[var1,...,varn],output_name]]*n'''
         self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
-        UDF_string = '\n,'.join(['%s(%s) as %s'%(i[0],','.join(i[1]),i[2]) for i in UDF_struct])
+        function_string = '\n,'.join(['%s(%s) as %s'%(i[0],','.join(i[1]),i[2]) for i in function_struct])
         layer_name = '%s_%s'%(self.nick,self.current_layer)
         self.sql_string = '''select 
 *
@@ -118,9 +119,55 @@ from
 from
 \t(
 %s
-\t) %s'''%(UDF_string,self.sql_string,layer_name)
+\t) %s'''%(function_string,self.sql_string,layer_name)
         self.current_layer+=1
         return self
+    
+    def complicated_function(self,function_expression,input_name_list,output_name):
+        '''复杂函数,即多层嵌套的表达式,表达式中的输入变量用var1,var2...表示,如:substr(cast(var1 as string),1,var2)'''
+        self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
+        function_string = function_expression
+        for i in range(len(input_name_list)):
+            function_string = function_string.replace('var%s'%(i+1),input_name_list[i])
+        function_string = '%s as %s'%(function_string,output_name)
+        layer_name = '%s_%s'%(self.nick,self.current_layer)
+        self.sql_string = '''select 
+*
+,%s
+from
+\t(
+%s
+\t) %s'''%(function_string,self.sql_string,layer_name)
+        self.current_layer+=1
+        return self
+    
+    def complicated_function_multiple(self,function_struct):
+        '''
+        复杂函数,即多层嵌套的表达式,表达式中的输入变量用var1,var2...表示,如:substr(cast(var1 as string),1,var2)
+        function_struct格式: [[function_expression,[var1,...,varn],output_name]]*n
+        '''
+        self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
+        function_string_list = []
+        for function_struct_i in function_struct:
+            function_string = function_struct_i[0]
+            input_name_list = function_struct_i[1]
+            output_name = function_struct_i[2]
+            for i in range(len(input_name_list)):
+                function_string = function_string.replace('var%s'%(i+1),input_name_list[i])
+            function_string = '%s as %s'%(function_string,output_name)
+            function_string_list.append(function_string)
+        function_string = '\n,'.join(function_string_list)
+        layer_name = '%s_%s'%(self.nick,self.current_layer)
+        self.sql_string = '''select 
+*
+,%s
+from
+\t(
+%s
+\t) %s'''%(function_string,self.sql_string,layer_name)
+        self.current_layer+=1
+        return self
+        
     
     def join(self,target_table,on,how='left outer'):
         self.sql_left = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
