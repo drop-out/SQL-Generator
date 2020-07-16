@@ -8,6 +8,6 @@ table_left.select(['name1','namea','nameb'])\
 .left_join(table_right,on='left.a = right.b')\
 .rename('name1','name2')\
 .rename_multiple([['namea','namec'],['nameb','named']])\
-.UDF('UDFc',['a','b'],'c')\
-.UDF_multiple([['UDF1',['a','b'],'c'],['UDF2',['p','q'],'r']])\
+.function('',['a','b'],'c')\
+.complicated_function_multiple([['cast(var1 as string)',['d'],'e'],['(var1+var2)',['p','q'],'r']])\
 .create('table_final',drop=True)
