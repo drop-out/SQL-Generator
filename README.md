@@ -1,12 +1,13 @@
 # SQL-Generator
 Generate SQL script with Pandas-like Python code
-feature:
+
+### Supported features:
 1. Automatically generate SQL script for you
 2. Automatically formatting
 3. Support complicated nested join
 4. Name the staging table automatically, such as A_0,A_1,A_2 ...
 
-Generated script example:
+### Generated script example:
 ```sql
 create table table_final as 
 select 
