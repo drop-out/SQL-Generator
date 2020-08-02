@@ -201,6 +201,24 @@ on %s'''%(self.sql_left,self.layer_name_left,how,self.sql_right,self.layer_name_
     def full_join(self,target_table,on):
         return self.join(target_table,on,how='full outer')
     
+    def union(self,target_tables):
+        self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
+        sql_to_union = ['\n'.join(['\t'+line for line in target_table.sql_string.split('\n')]) for target_table in target_tables]
+        
+        for i in sql_to_union:
+            self.sql_string = self.sql_string +'\nunion\n' + i + '\n'
+            
+        return self
+    
+    def union_all(self,target_tables):
+        self.sql_string = '\n'.join(['\t'+line for line in self.sql_string.split('\n')])
+        sql_to_union = ['\n'.join(['\t'+line for line in target_table.sql_string.split('\n')]) for target_table in target_tables]
+        
+        for i in sql_to_union:
+            self.sql_string = self.sql_string +'\nunion all\n' + i + '\n'
+            
+        return self
+    
     
     def create(self,name,drop = False):
         self.sql_string = 'create table %s as \n%s' %(name,self.sql_string)+'\n;'
