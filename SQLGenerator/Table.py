@@ -226,3 +226,29 @@ on %s'''%(self.sql_left,self.layer_name_left,how,self.sql_right,self.layer_name_
             self.sql_string = 'drop table if exists %s;\n'%name+self.sql_string
         print(self.sql_string)
 
+
+# 用于删除多余的tab
+def tab_remover(line):
+    if line is None or line=='':
+        return line
+    line_split = line.split('\n')
+    boolean_could_tab_remove = True # 默认可以移除
+    boolean_need_tab_remove = False # 默认无需移除
+    # 两个boolean标记，是为了避免多行空字符('')串进入死循环
+    for l in line_split:
+        if l=='':
+            pass
+        elif l[0]=='\t' or l[:4]=='    ':
+            boolean_need_tab_remove = True # 只要有一个'\t'或'    ',就需要移除
+        else:
+            boolean_could_tab_remove = False # 只要有一行不在('','\t','    ')范围内，就无法移除
+    if boolean_need_tab_remove and boolean_could_tab_remove: # 需要且可以移除
+        for i in range(len(line_split)):
+            if line_split[i]=='':
+                pass
+            elif line_split[i][0]=='\t':
+                line_split[i] = line_split[i][1:]
+            else:
+                line_split[i] = line_split[i][4:]
+        return tab_remover('\n'.join(line_split))
+    return line
