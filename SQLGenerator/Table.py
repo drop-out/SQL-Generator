@@ -1,6 +1,8 @@
 
 #coding=utf-8
 
+import re
+
 alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 class Table:
     nick_list = ['ADD','ALL','ALTER','AND','AS','ASC','BETWEEN','BIGINT','BOOLEAN','BY','CASE','CAST','COLUMN','COMMENT','CREATE','DESC','DISTINCT','DISTRIBUTE','DOUBLE','DROP','ELSE','FALSE','FROM','FULL','GROUP','IF','IN','INSERT','INTO','IS','JOIN','LEFT','LIFECYCLE','LIKE','LIMIT','MAPJOIN','NOT','NULL','ON','OR','ORDER','OUTER','OVERWRITE','PARTITION','RENAME','REPLACE','RIGHT','RLIKE','SELECT','SORT','STRING','TABLE','THEN','TOUCH','TRUE','UNION','VIEW','WHEN','WHERE']
@@ -227,8 +229,10 @@ on %s'''%(self.sql_left,self.layer_name_left,how,self.sql_right,self.layer_name_
         print(self.sql_string)
 
 
-# 用于删除多余的tab
+
 def tab_remover(line):
+    '''用于删除多余的tab
+    '''
     if line is None or line=='':
         return line
     line_split = line.split('\n')
@@ -252,3 +256,39 @@ def tab_remover(line):
                 line_split[i] = line_split[i][4:]
         return tab_remover('\n'.join(line_split))
     return line
+
+pattern_comment_line = re.compile(r'\n{0,1}(--|#).*?\n')
+def comments_remover(code_string):
+    '''
+    用于删除注释
+    示例数据如下
+    code_string="""
+    ,aaaa as aaa
+    ,bbbb as bbb--注释
+    # 注释
+    # 注释
+    ,cccc as ccc
+    """
+    用re.sub一次性去掉注释会有问题，注释之间会overlap(多行注释)
+    result = re.sub(r'\n{0,1}(--|#).*?\n','\n',s)
+    '''
+    result = code_string
+    
+    while re.search(pattern_comment_line,result):
+        result = re.sub(pattern_comment_line,'\n',result,1)
+    
+    return result
+
+
+
+def column_parser(code_string):
+    '''
+    用于提取列名
+    parameters:
+        code_string: 代码片段
+    return: list of name(string)
+    '''
+    result = comments_remover(code_string) # 移除注释
+    result = re.sub(r'[,\s\n\t]cast[\s\n\t]*\(.+[\s\n\t]+as[\s\n\t]+.*?\)','',result) # 移除cast(... as ..) pattern
+    result = re.findall(r'[\s\n\t]+as[\s\n\t]+(.*?)[,\s\n\t]',result) # 提取剩余所有的as
+    return result
