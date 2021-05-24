@@ -1,1 +1,2 @@
 from SQLGenerator.Table import Table
+from SQLGenerator.Table import tab_remover,comments_remover,column_parser
