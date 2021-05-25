@@ -289,6 +289,6 @@ def column_parser(code_string):
     return: list of name(string)
     '''
     result = comments_remover(code_string) # 移除注释
-    result = re.sub(r'[,\s\n\t]cast[\s\n\t]*\(.+[\s\n\t]+as[\s\n\t]+.*?\)','',result) # 移除cast(... as ..) pattern
+    result = re.sub(r'[,\s\n\t\(]cast[\s\n\t]*\(.+[\s\n\t]+as[\s\n\t]+.*?\)','',result) # 移除cast(... as ..) pattern
     result = re.findall(r'[\s\n\t]+as[\s\n\t]+(.*?)[,\s\n\t]',result) # 提取剩余所有的as
     return result
