@@ -300,19 +300,18 @@ def hashdraw_condition_generator(target_percentage,name_hash,precision=4,letter_
         target_percentage: 目标百分比, 如0.25
         name_hash: hash字段表达式, 如 md5(id)
         precision: 抽样精度(hash位数)
-        letter_list: hash字母取值范围
+        letter_list: hash字母取值范围(有序)
     return: condition_expression(string)
     '''
-    reserve_letter = letter_list[-1]
     residual_percentage = target_percentage
     current_precision = 1
     condition = []
+    prefix = ''
     while residual_percentage>0 and current_precision<=precision:
         portion_size = pow(1/16,current_precision)
         n_portions = int(residual_percentage//portion_size)
-        if n_portions>0:
-            name_hash_piece = 'substr(%s,1,%s)'%(name_hash,current_precision)
-            condition.append(name_hash_piece + ' in (' + ','.join(['"' + reserve_letter*(current_precision-1) + i + '"' for i in letter_list[:n_portions]]) + ')')
         residual_percentage = residual_percentage%portion_size
         current_precision+=1
-    return '\nor '.join(condition)
+        prefix = prefix + letter_list[n_portions]
+    condition_expression = 'substr(%s,1,%s)<"%s"'%(name_hash,current_precision-1,prefix)
+    return condition_expression
