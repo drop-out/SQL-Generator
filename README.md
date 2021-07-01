@@ -69,7 +69,7 @@ table_left.left_join(table_right,on='left.name1 = right.namec')\
 
 # Install
 ```bash
-pip install https://github.com/drop-out/SQL-Generator/raw/master/dist/SQLGenerator-by-dropout-0.0.4.tar.gz --no-cache
+pip install https://github.com/drop-out/SQL-Generator/raw/master/dist/SQLGenerator-by-dropout-0.0.5.tar.gz --no-cache
 ```
 
 # Example

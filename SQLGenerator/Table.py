@@ -292,3 +292,27 @@ def column_parser(code_string):
     result = re.sub(r'[,\s\n\t\(]cast[\s\n\t]*\(.+[\s\n\t]+as[\s\n\t]+.*?\)','',result) # 移除cast(... as ..) pattern
     result = re.findall(r'[\s\n\t]+as[\s\n\t]+(.*?)[,\s\n\t]',result) # 提取剩余所有的as
     return result
+
+def hashdraw_condition_generator(target_percentage,name_hash,precision=4,letter_list = ('0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f')):
+    '''
+    用于基于hash字段的随机抽样
+    parameters:
+        target_percentage: 目标百分比, 如0.25
+        name_hash: hash字段表达式, 如 md5(id)
+        precision: 抽样精度(hash位数)
+        letter_list: hash字母取值范围
+    return: condition_expression(string)
+    '''
+    reserve_letter = letter_list[-1]
+    residual_percentage = target_percentage
+    current_precision = 1
+    condition = []
+    while residual_percentage>0 and current_precision<=precision:
+        portion_size = pow(1/16,current_precision)
+        n_portions = int(residual_percentage//portion_size)
+        if n_portions>0:
+            name_hash_piece = 'substr(%s,1,%s)'%(name_hash,current_precision)
+            condition.append(name_hash_piece + ' in (' + ','.join(['"' + reserve_letter*(current_precision-1) + i + '"' for i in letter_list[:n_portions]]) + ')')
+        residual_percentage = residual_percentage%portion_size
+        current_precision+=1
+    return '\nor '.join(condition)
